@@ -98,7 +98,8 @@ window.rejectOrder = async (orderId, userUid, amount) => {
   if(!confirm("Are you sure you want to Cancel and Refund this order?")) return;
   try {
     const batch = writeBatch(db);
-    batch.update(doc(db, "users", userUid), { balance: increment(amount) });
+    // update এর বদলে set এবং merge: true করে দিন
+    batch.set(doc(db, "users", userUid), { balance: increment(amount) }, { merge: true });
     batch.update(doc(db, "orders", orderId), { status: "Cancelled" });
     await batch.commit();
     alert("Order Cancelled and Balance Refunded!");
