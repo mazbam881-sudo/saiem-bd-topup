@@ -53,7 +53,8 @@
 <script type="module">
 import { auth, db } from "../js/firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { collection, query, orderBy, getDocs, doc, getDoc, updateDoc, getCountFromServer } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+// ইমপোর্ট লাইনে setDoc এবং increment যুক্ত করা হলো
+import { collection, query, orderBy, getDocs, doc, getDoc, updateDoc, getCountFromServer, setDoc, increment } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const ADMIN_EMAIL = "mazbam881@gmail.com";
 const requestList = document.getElementById("requestList");
@@ -113,14 +114,13 @@ async function loadRequests() {
     document.getElementById("rejectedCount").innerText = rejected;
 }
 
+// approveRequest ফাংশনটি রিপ্লেস করা হলো
 window.approveRequest = async (reqId, uid, amount) => {
     if(!confirm("Are you sure you want to approve?")) return;
     try {
         const userRef = doc(db, "users", uid);
-        const userSnap = await getDoc(userRef);
-        const currentBalance = Number(userSnap.data().balance || 0);
-        
-        await updateDoc(userRef, { balance: currentBalance + amount });
+        // আগের ব্যালেন্স রিড না করে সরাসরি increment ব্যবহার করুন
+        await setDoc(userRef, { balance: increment(amount) }, { merge: true });
         await updateDoc(doc(db, "balance_requests", reqId), { status: "Approved" });
         loadRequests();
     } catch(e) { alert(e.message); }
