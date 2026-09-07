@@ -123,7 +123,7 @@
 </audio>
 
 <script type="module">
-import { auth, db } from "/js/firebase.js"; 
+import { auth, db } from "/js/firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { collection, query, orderBy, getDocs, doc, getDoc, updateDoc, writeBatch, increment, getCountFromServer, onSnapshot, where } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -277,7 +277,8 @@ window.approveRequest = async (docId, userUid, amount) => {
     if(!confirm(`অ্যাপ্রুভ করবেন? ৳${amount} ব্যালেন্স অ্যাড হবে।`)) return;
     try {
         const batch = writeBatch(db);
-        batch.update(doc(db, "users", userUid), { balance: increment(amount) });
+        // update এর বদলে set এবং { merge: true }
+        batch.set(doc(db, "users", userUid), { balance: increment(amount) }, { merge: true });
         batch.update(doc(db, "balance_requests", docId), { status: "Approved" });
         await batch.commit();
         loadDashboard();
@@ -299,7 +300,8 @@ window.cancelOrder = async (docId, userUid, amount) => {
     if(!confirm(`অর্ডার বাতিল করে ৳${amount} রিফান্ড করবেন?`)) return;
     try {
         const batch = writeBatch(db);
-        batch.update(doc(db, "users", userUid), { balance: increment(amount) });
+        // update এর বদলে set এবং { merge: true }
+        batch.set(doc(db, "users", userUid), { balance: increment(amount) }, { merge: true });
         batch.update(doc(db, "orders", docId), { status: "Cancelled" });
         await batch.commit();
         loadDashboard();
