@@ -152,7 +152,7 @@ async function sendTelegramMessage(message) {
 }
 
 // ==========================================
-// Player UID Checker API (Multi-API Fallback)
+// Player UID Checker API (Proxy)
 // ==========================================
 const checkUidBtn = document.getElementById("checkUidBtn");
 const playerNameDisplay = document.getElementById("playerNameDisplay");
@@ -172,41 +172,24 @@ if (checkUidBtn) {
         playerNameDisplay.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-blue-500"></i> সার্ভার থেকে নাম খোঁজা হচ্ছে (কিছুক্ষণ সময় লাগতে পারে)...';
 
         try {
+            const PROXY_URL = "https://script.google.com/macros/s/AKfycbw2GLvJFgGdDJt4tF7BvGL0s6OKh_HzCQQWd8ctG3_wto7tYbupLov6Ma-CaK-3vrp9/exec";
+            
+            const res = await fetch(`${PROXY_URL}?uid=${uid}`);
+            const data = await res.json();
+
             let playerName = null;
-            let success = false;
-
-            // API 1: Render Server (BD Region specific)
-            try {
-                const res1 = await fetch(`https://free-ff-api-src-5plp.onrender.com/api/v1/account?region=BD&uid=${uid}`);
-                const data1 = await res1.json();
-                if (data1.basicInfo && data1.basicInfo.nickname) {
-                    playerName = data1.basicInfo.nickname;
-                    success = true;
-                }
-            } catch(e) { console.log("API 1 is sleeping, trying API 2..."); }
-
-            // API 2: ISAN Server (Global) - Fallback
-            if (!success) {
-                try {
-                    const res2 = await fetch(`https://api.isan.eu.org/nickname/ff?id=${uid}`);
-                    const data2 = await res2.json();
-                    if (data2.name) {
-                        playerName = data2.name;
-                        success = true;
-                    }
-                } catch(e) { console.log("API 2 failed"); }
+            if (data.basicInfo && data.basicInfo.nickname) {
+                playerName = data.basicInfo.nickname;
             }
 
-            // Results Show
-            if (success && playerName) {
+            if (playerName) {
                 playerNameDisplay.innerHTML = `<i class="fa-solid fa-check-circle text-green-500"></i> <span class="text-white font-bold text-base tracking-wider">${playerName}</span>`;
             } else {
-                playerNameDisplay.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-500"></i> ভুল UID বা সার্ভার ডাউন! ১ মিনিট পর আবার ক্লিক করুন।`;
+                playerNameDisplay.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-500"></i> ভুল UID! আবার চেক করুন।`;
             }
-
         } catch (error) {
-            console.error("API Error:", error);
-            playerNameDisplay.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-yellow-500"></i> সার্ভার একটু স্লো, কিছুক্ষণ পর আবার চেষ্টা করুন।`;
+            console.error("Proxy Error:", error);
+            playerNameDisplay.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-yellow-500"></i> সার্ভার সমস্যা! কিছুক্ষণ পর চেষ্টা করুন।`;
         } finally {
             checkUidBtn.innerHTML = originalBtnText;
             checkUidBtn.disabled = false;
