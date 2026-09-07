@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet - Saiem Bd Top Up</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    ::-webkit-scrollbar { display: none; }
+</style>
+</head>
+
+<body class="bg-gray-900 text-white pb-24">
+
+<header class="bg-gray-800 shadow-md sticky top-0 z-50 border-b border-gray-700">
+    <div class="max-w-md mx-auto flex items-center justify-between p-4">
+        <a href="dashboard.html" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-arrow-left text-xl"></i></a>
+        <h1 class="text-xl font-bold text-white text-center flex-1">My Wallet</h1>
+        <div class="w-5"></div>
+    </div>
+</header>
+
+<div class="max-w-md mx-auto mt-6 px-4">
+    <!-- Wallet Balance Card -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+        <i class="fa-solid fa-wallet absolute -right-4 -bottom-4 text-7xl opacity-20"></i>
+        <p class="text-sm font-medium opacity-90">Available Balance</p>
+        <h2 class="text-4xl font-bold mt-2">৳<span id="walletBalance">...</span></h2>
+        <p class="mt-4 text-xs font-medium bg-blue-900/50 inline-block px-3 py-1 rounded-full border border-blue-400/30">Saiem Bd Top Up Wallet</p>
+    </div>
+
+    <!-- Payment Instructions Card -->
+    <div class="bg-gray-800 rounded-2xl shadow-lg border border-gray-700 p-5 mt-6 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-1 h-full bg-pink-500"></div>
+        <h3 class="text-lg font-bold text-white mb-3">কিভাবে টাকা অ্যাড করবেন?</h3>
+        <p class="text-xs text-gray-400 mb-4">নিচের বিকাশ নাম্বারে <span class="text-pink-500 font-bold">Send Money</span> করুন। তারপর নিচের ফর্মে টাকার পরিমাণ ও Transaction ID দিয়ে রিকোয়েস্ট পাঠান। ১-৫ মিনিটের মধ্যে ব্যালেন্স অ্যাড হয়ে যাবে।</p>
+        
+        <div class="space-y-3">
+            <div class="flex justify-between items-center bg-gray-900 p-3 rounded-lg border border-gray-700">
+                <div class="flex items-center gap-2">
+                    <img src="https://download.logo.wine/logo/BKash/BKash-Icon-Logo.wine.png" alt="bKash" class="w-8 h-8 object-contain">
+                    <div>
+                        <p class="text-sm font-bold text-pink-500">bKash (Personal)</p>
+                        <p class="text-xs text-gray-300 tracking-wider">01875045912</p>
+                    </div>
+                </div>
+                <button onclick="copyText('01875045912')" class="text-gray-400 hover:text-white transition" title="Copy Number"><i class="fa-solid fa-copy"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Money Form -->
+    <div class="bg-gray-800 rounded-2xl shadow-lg border border-gray-700 p-6 mt-6 mb-10">
+        <h3 class="text-lg font-bold text-white mb-5 border-l-4 border-blue-500 pl-3">Add Balance Request</h3>
+
+        <label class="font-semibold text-gray-300 text-sm">Payment Method</label>
+        <select id="paymentMethod" class="w-full mt-2 mb-4 bg-gray-900 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:border-blue-500 text-sm">
+            <option value="bKash Personal">bKash (Personal)</option>
+        </select>
+
+        <label class="font-semibold text-gray-300 text-sm">Amount (৳)</label>
+        <input type="number" id="amount" placeholder="Enter Amount (e.g. 100)" class="w-full mt-2 mb-4 bg-gray-900 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:border-blue-500 text-sm">
+
+        <label class="font-semibold text-gray-300 text-sm">Transaction ID</label>
+        <input type="text" id="trxId" placeholder="e.g. 8K4SDF..." class="w-full mt-2 mb-6 bg-gray-900 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:border-blue-500 text-sm">
+
+        <button id="submitBalanceBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold transition shadow-md">Submit Request</button>
+    </div>
+</div>
+
+<nav class="fixed bottom-0 left-0 w-full bg-gray-800 border-t border-gray-700 shadow-lg z-50">
+    <div class="max-w-md mx-auto grid grid-cols-4 text-center py-2">
+        <a href="../index.html" class="text-gray-400 hover:text-blue-500 transition"><i class="fa-solid fa-house text-xl mb-1"></i><p class="text-[10px] font-semibold">Home</p></a>
+        <a href="tracking.html" class="text-gray-400 hover:text-blue-500 transition"><i class="fa-solid fa-box text-xl mb-1"></i><p class="text-[10px] font-semibold">Orders</p></a>
+        <a href="wallet.html" class="text-blue-500 transition"><i class="fa-solid fa-wallet text-xl mb-1"></i><p class="text-[10px] font-bold">Wallet</p></a>
+        <a href="dashboard.html" class="text-gray-400 hover:text-blue-500 transition"><i class="fa-solid fa-user text-xl mb-1"></i><p class="text-[10px] font-semibold">Account</p></a>
+    </div>
+</nav>
+
+<script>
+    function copyText(text) {
+        navigator.clipboard.writeText(text);
+        alert("Number Copied: " + text);
+    }
+</script>
+
+<script type="module">
+import { auth, db } from "../js/firebase.js"; 
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { collection, addDoc, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+// ==========================================
+// TELEGRAM BOT API (SECURE LINK)
+// ==========================================
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYa3Udl_PoojcCSe-47hZ-Hji9JBiOvAvavF7CXJ572cR_mUVgptCTQNsaz6i2EcVJ1Q/exec"; 
+
+async function sendTelegramMessage(message) {
+    try {
+        await fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ message: message })
+        });
+    } catch (error) {
+        console.error("Telegram Error:", error);
+    }
+}
+// ==========================================
+
+const paymentMethod = document.getElementById("paymentMethod");
+const amount = document.getElementById("amount");
+const trxId = document.getElementById("trxId");
+const submitBalanceBtn = document.getElementById("submitBalanceBtn");
+const walletBalanceDisplay = document.getElementById("walletBalance");
+
+onAuthStateChanged(auth, async (user) => {
+    if (!user) { window.location.href = "login.html"; return; }
+    try {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+            walletBalanceDisplay.innerText = userSnap.data().balance || 0;
+        } else {
+            walletBalanceDisplay.innerText = 0;
+        }
+    } catch (error) { console.error("Error fetching balance:", error); }
+});
+
+submitBalanceBtn.addEventListener("click", async () => {
+    const user = auth.currentUser;
+    if (!user) { alert("Please Login First"); return; }
+
+    const method = paymentMethod.value;
+    const taka = amount.value.trim();
+    const transaction = trxId.value.trim();
+
+    if (method === "" || taka === "" || transaction === "") {
+        alert("অনুগ্রহ করে টাকার পরিমাণ এবং Transaction ID সঠিকভাবে দিন।");
+        return;
+    }
+
+    const originalText = submitBalanceBtn.innerText;
+    submitBalanceBtn.innerText = "Submitting...";
+
+    try {
+        await addDoc(collection(db, "balance_requests"), {
+            uid: user.uid,
+            name: user.displayName || "User", 
+            email: user.email,
+            paymentMethod: method,
+            amount: Number(taka),
+            trxId: transaction,
+            status: "Pending",
+            createdAt: serverTimestamp()
+        });
+
+        const msg = `💰 <b>New Add Money Request!</b>\n\n👤 Email: ${user.email}\n💳 Method: ${method}\n💵 Amount: ৳${taka}\n🆔 TrxID: <code>${transaction}</code>`;
+        await sendTelegramMessage(msg);
+
+        alert("আপনার ব্যালেন্স রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
+        amount.value = "";
+        trxId.value = "";
+
+    } catch (error) {
+        console.log(error);
+        alert(error.message);
+    } finally {
+        submitBalanceBtn.innerText = originalText;
+    }
+});
+</script>
+
+</body>
+</html>

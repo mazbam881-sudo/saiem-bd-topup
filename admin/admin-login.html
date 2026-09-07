@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login - Saiem Bd</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+
+  <div class="w-full max-w-md bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl p-8 relative overflow-hidden">
+    <!-- Accent Glow -->
+    <div class="absolute top-0 left-0 w-full h-2 bg-blue-600"></div>
+
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 mx-auto rounded-full bg-gray-900 border-2 border-blue-500 text-blue-500 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(59,130,246,0.4)] mb-4">
+        <i class="fa-solid fa-user-shield"></i>
+      </div>
+      <h1 class="text-2xl font-black text-white tracking-wide">ADMIN LOGIN</h1>
+      <p class="text-gray-400 text-sm mt-1">Saiem Bd Top Up Panel</p>
+    </div>
+
+    <div class="space-y-5">
+      <div>
+        <label class="block font-bold text-gray-300 text-sm mb-2">Admin Email</label>
+        <div class="relative">
+            <i class="fa-solid fa-envelope absolute left-4 top-3.5 text-gray-500"></i>
+            <input id="adminEmail" type="email" class="w-full bg-gray-900 border border-gray-600 text-white rounded-lg p-3 pl-11 outline-none focus:border-blue-500 transition" placeholder="admin@example.com">
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-bold text-gray-300 text-sm mb-2">Password</label>
+        <div class="relative">
+            <i class="fa-solid fa-lock absolute left-4 top-3.5 text-gray-500"></i>
+            <input id="adminPassword" type="password" class="w-full bg-gray-900 border border-gray-600 text-white rounded-lg p-3 pl-11 outline-none focus:border-blue-500 transition" placeholder="Enter password">
+        </div>
+      </div>
+
+      <button id="adminLoginBtn" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-black tracking-wider transition shadow-lg flex justify-center items-center gap-2">
+        LOGIN SECURELY <i class="fa-solid fa-arrow-right"></i>
+      </button>
+
+      <p id="msg" class="text-sm text-center font-bold mt-2"></p>
+    </div>
+  </div>
+
+<script type="module">
+// পাথ ঠিক করা হয়েছে
+import { auth } from "../js/firebase.js";
+import { signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const adminEmail = document.getElementById("adminEmail");
+const adminPassword = document.getElementById("adminPassword");
+const adminLoginBtn = document.getElementById("adminLoginBtn");
+const msg = document.getElementById("msg");
+
+// আপনার অ্যাডমিন ইমেইল
+const ADMIN_EMAIL = "mazbam881@gmail.com";
+
+adminLoginBtn.addEventListener("click", async () => {
+    msg.textContent = "";
+    const email = adminEmail.value.trim().toLowerCase();
+    const password = adminPassword.value.trim();
+
+    if (!email || !password) {
+        msg.textContent = "⚠️ সব ফিল্ড পূরণ করুন।";
+        msg.className = "text-sm text-center font-bold mt-2 text-yellow-400";
+        return;
+    }
+
+    const originalText = adminLoginBtn.innerHTML;
+    adminLoginBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+
+    try {
+        const result = await signInWithEmailAndPassword(auth, email, password);
+
+        if (result.user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+            await signOut(auth);
+            msg.textContent = "❌ আপনি অ্যাডমিন নন!";
+            msg.className = "text-sm text-center font-bold mt-2 text-red-400";
+            adminLoginBtn.innerHTML = originalText;
+            return;
+        }
+
+        msg.textContent = "✅ Login Successful!";
+        msg.className = "text-sm text-center font-bold mt-2 text-green-400";
+        setTimeout(() => { window.location.replace("admin.html"); }, 1000);
+
+    } catch (error) {
+        console.log(error);
+        msg.className = "text-sm text-center font-bold mt-2 text-red-400";
+        if (error.code === "auth/invalid-credential") {
+            msg.textContent = "❌ Email অথবা Password ভুল!";
+        } else {
+            msg.textContent = "❌ " + error.message;
+        }
+        adminLoginBtn.innerHTML = originalText;
+    }
+});
+</script>
+</body>
+</html>

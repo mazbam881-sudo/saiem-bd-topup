@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders - Saiem Bd Top Up</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style> ::-webkit-scrollbar { display: none; } </style>
+</head>
+
+<body class="bg-gray-900 text-white pb-24">
+
+<!-- Header -->
+<header class="bg-gray-800 shadow-md sticky top-0 z-50 border-b border-gray-700">
+    <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+        <a href="../index.html" class="flex items-center gap-3 hover:opacity-90">
+            <div class="bg-blue-600 text-white px-3 py-1.5 rounded-lg font-extrabold text-sm shadow-md">Saiem Bd</div>
+            <div><h1 class="text-xl font-black text-white tracking-wide">SAIEM BD <span class="text-blue-500">TOPUP</span></h1></div>
+        </a>
+        <div class="flex items-center gap-3">
+            <div class="bg-gray-700 border border-gray-600 text-blue-400 px-4 py-2 rounded-lg font-bold shadow-inner">
+                💰 <span id="walletBalance">0</span>৳
+            </div>
+            <a href="dashboard.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold transition shadow-md">Dashboard</a>
+        </div>
+    </div>
+</header>
+
+<div class="max-w-6xl mx-auto mt-8 px-4">
+    <h2 class="text-2xl font-bold mb-6 border-l-4 border-blue-500 pl-3">My Orders</h2>
+    <div id="orderList" class="space-y-4">
+        <div class="bg-gray-800 rounded-xl shadow p-8 text-center text-gray-400 border border-gray-700">
+            <i class="fa-solid fa-spinner fa-spin text-2xl text-blue-500 mb-2"></i><br>Loading Orders...
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Mobile Nav -->
+<nav class="fixed bottom-0 left-0 w-full bg-gray-800 border-t border-gray-700 shadow-lg md:hidden z-50">
+    <div class="grid grid-cols-4 text-center py-2">
+        <a href="../index.html" class="text-gray-400 hover:text-blue-500 transition"><i class="fa-solid fa-house text-xl mb-1"></i><p class="text-[10px] font-semibold">Home</p></a>
+        <a href="tracking.html" class="text-blue-500 transition"><i class="fa-solid fa-box text-xl mb-1"></i><p class="text-[10px] font-bold">Orders</p></a>
+        <a href="wallet.html" class="text-gray-400 hover:text-blue-500 transition"><i class="fa-solid fa-wallet text-xl mb-1"></i><p class="text-[10px] font-semibold">Wallet</p></a>
+        <a href="dashboard.html" class="text-gray-400 hover:text-blue-500 transition"><i class="fa-solid fa-user text-xl mb-1"></i><p class="text-[10px] font-semibold">Account</p></a>
+    </div>
+</nav>
+
+<script type="module">
+import { auth, db } from "../js/firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { doc, getDoc, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const orderList = document.getElementById("orderList");
+
+onAuthStateChanged(auth, async (user) => {
+    if (!user) { window.location.href = "login.html"; return; }
+    
+    const userSnap = await getDoc(doc(db, "users", user.uid));
+    if (userSnap.exists()) document.getElementById("walletBalance").innerText = userSnap.data().balance || 0;
+    
+    loadOrders(user.uid);
+});
+
+async function loadOrders(uid) {
+    const q = query(collection(db, "orders"), where("uid", "==", uid), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(q);
+
+    if(snapshot.empty){
+        orderList.innerHTML = `<div class="bg-gray-800 rounded-xl p-8 text-center text-gray-400 border border-gray-700">No Orders Found</div>`;
+        return;
+    }
+
+    orderList.innerHTML = "";
+    snapshot.forEach((order) => {
+        const data = order.data();
+        let statusColor = "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
+        if(data.status === "Approved" || data.status === "Complete") statusColor = "text-green-400 bg-green-400/10 border-green-400/20";
+        if(data.status === "Rejected" || data.status === "Cancelled") statusColor = "text-red-400 bg-red-400/10 border-red-400/20";
+
+        const orderTime = data.createdAt ? data.createdAt.toDate().toLocaleString() : "N/A";
+
+        orderList.innerHTML += `
+        <div class="bg-gray-800 border border-gray-700 rounded-xl shadow p-5">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-3 mb-3">
+                <h2 class="text-lg font-bold text-white">${data.packageName}</h2>
+                <span class="px-3 py-1 text-xs rounded-full border ${statusColor} font-bold">${data.status}</span>
+            </div>
+            <div class="space-y-1 text-sm text-gray-300">
+                <p><b class="text-gray-400">UID:</b> <span class="font-mono text-white">${data.playerUID}</span></p>
+                <p><b class="text-gray-400">Amount:</b> ৳${data.amount}</p>
+                <p><b class="text-gray-400">Time:</b> ${orderTime}</p>
+                <p><b class="text-gray-400">Order ID:</b> <span class="font-mono text-xs">${order.id}</span>
+                   <button onclick="navigator.clipboard.writeText('${order.id}'); alert('Copied!')" class="ml-2 text-blue-500 hover:text-blue-400"><i class="fa-solid fa-copy"></i></button>
+                </p>
+            </div>
+        </div>`;
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel - Saiem Bd</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    ::-webkit-scrollbar { display: none; }
+</style>
+</head>
+
+<body class="bg-gray-900 text-white pb-20">
+
+<!-- Admin Header -->
+<header class="bg-gray-800 shadow-md sticky top-0 z-50 border-b border-gray-700">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+        <div class="flex items-center gap-3">
+            <div class="bg-red-600 text-white px-3 py-1.5 rounded-lg font-extrabold text-sm shadow-md">
+                <i class="fa-solid fa-user-shield"></i> ADMIN
+            </div>
+            <h1 class="text-lg md:text-xl font-black text-white tracking-wide">
+                SAIEM BD <span class="text-blue-500">PANEL</span>
+            </h1>
+        </div>
+        <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold text-sm transition shadow-md flex items-center gap-2">
+            <i class="fa-solid fa-sign-out-alt"></i> <span class="hidden md:inline">Logout</span>
+        </button>
+    </div>
+</header>
+
+<div class="max-w-7xl mx-auto mt-6 px-4">
+
+    <!-- Dashboard Cards (Merged from your code) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-gray-800 border-b-4 border-blue-500 rounded-xl p-5 shadow-lg">
+            <p class="text-sm text-gray-400 font-bold mb-1"><i class="fa-solid fa-users text-blue-500 mr-1"></i> Total Users</p>
+            <h2 id="totalUsers" class="text-3xl font-black text-white">0</h2>
+        </div>
+        <div class="bg-gray-800 border-b-4 border-green-500 rounded-xl p-5 shadow-lg">
+            <p class="text-sm text-gray-400 font-bold mb-1"><i class="fa-solid fa-money-bill-wave text-green-500 mr-1"></i> Users Balance</p>
+            <h2 id="totalBalance" class="text-3xl font-black text-white">৳0</h2>
+        </div>
+        <div class="bg-gray-800 border-b-4 border-yellow-500 rounded-xl p-5 shadow-lg">
+            <p class="text-sm text-gray-400 font-bold mb-1"><i class="fa-solid fa-clock text-yellow-500 mr-1"></i> Add Money (Pending)</p>
+            <h2 id="pendingCount" class="text-3xl font-black text-white">0</h2>
+        </div>
+        <div class="bg-gray-800 border-b-4 border-red-500 rounded-xl p-5 shadow-lg">
+            <p class="text-sm text-gray-400 font-bold mb-1"><i class="fa-solid fa-box-open text-red-500 mr-1"></i> Orders (Pending)</p>
+            <h2 id="pendingOrders" class="text-3xl font-black text-white">0</h2>
+        </div>
+    </div>
+
+    <!-- Sales Analytics (Merged from your code) -->
+    <h2 class="text-xl font-bold mb-4 border-l-4 border-purple-500 pl-3">📊 Sales Analytics</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+        <div class="bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-xl p-5 shadow-lg relative overflow-hidden">
+            <i class="fa-solid fa-calendar-day absolute -right-3 -bottom-3 text-6xl opacity-20"></i>
+            <p class="text-sm font-bold opacity-90">Today Sales</p>
+            <h2 id="todaySales" class="text-3xl font-black mt-1">৳0</h2>
+        </div>
+        <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-5 shadow-lg relative overflow-hidden">
+            <i class="fa-solid fa-calendar-week absolute -right-3 -bottom-3 text-6xl opacity-20"></i>
+            <p class="text-sm font-bold opacity-90">This Week</p>
+            <h2 id="weekSales" class="text-3xl font-black mt-1">৳0</h2>
+        </div>
+        <div class="bg-gradient-to-br from-green-600 to-green-800 rounded-xl p-5 shadow-lg relative overflow-hidden">
+            <i class="fa-solid fa-calendar-days absolute -right-3 -bottom-3 text-6xl opacity-20"></i>
+            <p class="text-sm font-bold opacity-90">This Month</p>
+            <h2 id="monthSales" class="text-3xl font-black mt-1">৳0</h2>
+        </div>
+        <div class="bg-gradient-to-br from-red-600 to-red-800 rounded-xl p-5 shadow-lg relative overflow-hidden">
+            <i class="fa-solid fa-chart-line absolute -right-3 -bottom-3 text-6xl opacity-20"></i>
+            <p class="text-sm font-bold opacity-90">Lifetime Sales</p>
+            <h2 id="lifetimeSales" class="text-3xl font-black mt-1">৳0</h2>
+        </div>
+    </div>
+
+    <!-- Main Actions Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+        
+        <!-- PENDING BALANCE REQUESTS -->
+        <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 shadow-lg">
+            <h2 class="text-xl font-bold mb-4 border-l-4 border-yellow-500 pl-3 flex items-center gap-2">
+                <i class="fa-solid fa-wallet text-yellow-500"></i> Add Money Requests
+            </h2>
+            <div id="requestList" class="space-y-4">
+                <div class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-2xl text-blue-500"></i></div>
+            </div>
+        </div>
+
+        <!-- PENDING ORDERS -->
+        <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 shadow-lg">
+            <h2 class="text-xl font-bold mb-4 border-l-4 border-red-500 pl-3 flex items-center gap-2">
+                <i class="fa-solid fa-gamepad text-red-500"></i> Pending Orders
+            </h2>
+            <div id="recentOrders" class="space-y-4">
+                <div class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-2xl text-red-500"></i></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Live Notification Popup (Themed) -->
+<div id="liveNotification" class="hidden fixed top-20 right-5 bg-gray-800 border-l-4 border-green-500 text-white px-6 py-4 rounded-xl shadow-2xl z-50 transform transition-transform duration-300">
+    <div class="flex items-center gap-3">
+        <div class="bg-green-500/20 text-green-500 p-2 rounded-full">
+            <i class="fa-solid fa-bell animate-bounce"></i>
+        </div>
+        <div>
+            <h2 class="font-bold text-sm text-gray-200">New Alert!</h2>
+            <p id="liveMessage" class="mt-0.5 text-xs font-mono text-gray-400"></p>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Sound -->
+<audio id="notificationSound" preload="auto">
+    <!-- আপনি ফোল্ডারে notification.mp3 ফাইলটি রাখতে ভুলবেন না -->
+    <source src="notification.mp3" type="audio/mpeg">
+</audio>
+
+<script type="module">
+import { auth, db } from "../js/firebase.js"; 
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { collection, query, orderBy, getDocs, doc, getDoc, updateDoc, writeBatch, increment, getCountFromServer, onSnapshot, where } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+// আপনার দেওয়া অ্যাডমিন ইমেইল
+const ADMIN_EMAIL = "mazbam881@gmail.com"; 
+
+onAuthStateChanged(auth, (user) => {
+    if (!user || user.email !== ADMIN_EMAIL) {
+        alert("Access Denied! You are not an Admin.");
+        window.location.replace("../pages/login.html");
+    }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.replace("../pages/login.html");
+});
+
+// =====================================
+// Load Dashboard Stats & Analytics
+// =====================================
+async function loadDashboard() {
+    try {
+        const usersSnap = await getCountFromServer(collection(db, "users"));
+        document.getElementById("totalUsers").textContent = usersSnap.data().count;
+
+        let balance = 0;
+        const users = await getDocs(collection(db, "users"));
+        users.forEach((user) => { balance += Number(user.data().balance || 0); });
+        document.getElementById("totalBalance").textContent = "৳" + balance;
+
+        let pendingReq = 0, pendingOrd = 0;
+        
+        const reqSnap = await getDocs(collection(db, "balance_requests"));
+        reqSnap.forEach(req => { if(req.data().status === "Pending") pendingReq++; });
+        document.getElementById("pendingCount").textContent = pendingReq;
+
+        const ordSnap = await getDocs(collection(db, "orders"));
+        ordSnap.forEach(ord => { if(ord.data().status === "Pending") pendingOrd++; });
+        document.getElementById("pendingOrders").textContent = pendingOrd;
+
+    } catch (e) { console.error("Stats Error:", e); }
+}
+
+async function loadSalesAnalytics() {
+    try {
+        const orders = await getDocs(collection(db, "orders"));
+        let today = 0, week = 0, month = 0, lifetime = 0;
+        const now = new Date();
+
+        orders.forEach((order) => {
+            const data = order.data();
+            if (data.status !== "Complete" && data.status !== "Approved") return; // Status mapping
+
+            const amount = Number(data.amount || 0);
+            lifetime += amount;
+
+            if (!data.createdAt) return;
+            const date = data.createdAt.toDate();
+            const diff = (now - date) / (1000 * 60 * 60 * 24);
+
+            if (diff < 1) today += amount;
+            if (diff < 7) week += amount;
+            if (diff < 30) month += amount;
+        });
+
+        document.getElementById("todaySales").textContent = "৳" + today;
+        document.getElementById("weekSales").textContent = "৳" + week;
+        document.getElementById("monthSales").textContent = "৳" + month;
+        document.getElementById("lifetimeSales").textContent = "৳" + lifetime;
+    } catch (e) { console.error("Sales Error:", e); }
+}
+
+// =====================================
+// Load Requests & Orders (Real-time)
+// =====================================
+const requestList = document.getElementById("requestList");
+const recentOrders = document.getElementById("recentOrders");
+
+// Balance Requests List
+const qBalance = query(collection(db, "balance_requests"), where("status", "==", "Pending"));
+onSnapshot(qBalance, (snapshot) => {
+    if (snapshot.empty) {
+        requestList.innerHTML = `<p class="text-center text-gray-500 py-4">No Pending Requests</p>`;
+        return;
+    }
+    let html = "";
+    snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        html += `
+        <div class="bg-gray-900 border border-gray-700 p-4 rounded-xl shadow-sm">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <p class="text-sm font-bold text-white">${data.email}</p>
+                    <p class="text-xs text-gray-400 font-mono mt-1">TrxID: <span class="text-blue-400">${data.trxId}</span></p>
+                    <p class="text-[10px] text-gray-500 mt-0.5">Method: ${data.paymentMethod}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-lg font-black text-yellow-400">৳${data.amount}</p>
+                </div>
+            </div>
+            <div class="flex gap-2 mt-3 border-t border-gray-700 pt-3">
+                <button onclick="approveRequest('${docSnap.id}', '${data.uid}', ${data.amount})" class="flex-1 bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-2 rounded-lg transition shadow">Approve</button>
+                <button onclick="rejectRequest('${docSnap.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 rounded-lg transition shadow">Reject</button>
+            </div>
+        </div>`;
+    });
+    requestList.innerHTML = html;
+});
+
+// Orders List
+const qOrders = query(collection(db, "orders"), where("status", "==", "Pending"));
+onSnapshot(qOrders, (snapshot) => {
+    if (snapshot.empty) {
+        recentOrders.innerHTML = `<p class="text-center text-gray-500 py-4">No Pending Orders</p>`;
+        return;
+    }
+    let html = "";
+    snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        html += `
+        <div class="bg-gray-900 border border-gray-700 p-4 rounded-xl shadow-sm">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <p class="text-sm font-bold text-white bg-blue-600/20 px-2 py-0.5 rounded inline-block mb-1">${data.packageName}</p>
+                    <p class="text-xs text-gray-400 font-mono mt-1">UID: <span class="text-white font-bold text-sm tracking-widest">${data.playerUID}</span></p>
+                </div>
+                <div class="text-right">
+                    <p class="text-base font-black text-gray-300">৳${data.amount}</p>
+                </div>
+            </div>
+            <div class="flex gap-2 mt-3 border-t border-gray-700 pt-3">
+                <button onclick="navigator.clipboard.writeText('${data.playerUID}'); alert('UID Copied!');" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg text-gray-300 transition" title="Copy UID">
+                    <i class="fa-solid fa-copy"></i>
+                </button>
+                <button onclick="completeOrder('${docSnap.id}')" class="flex-1 bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-2 rounded-lg transition shadow">Complete</button>
+                <button onclick="cancelOrder('${docSnap.id}', '${data.uid}', ${data.amount})" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 rounded-lg transition shadow">Refund</button>
+            </div>
+        </div>`;
+    });
+    recentOrders.innerHTML = html;
+});
+
+// =====================================
+// Action Functions
+// =====================================
+window.approveRequest = async (docId, userUid, amount) => {
+    if(!confirm(`অ্যাপ্রুভ করবেন? ৳${amount} ব্যালেন্স অ্যাড হবে।`)) return;
+    try {
+        const batch = writeBatch(db);
+        batch.update(doc(db, "users", userUid), { balance: increment(amount) });
+        batch.update(doc(db, "balance_requests", docId), { status: "Approved" });
+        await batch.commit();
+        loadDashboard();
+    } catch (e) { alert("Error: " + e.message); }
+};
+
+window.rejectRequest = async (docId) => {
+    if(!confirm(`রিকোয়েস্ট বাতিল করবেন?`)) return;
+    await updateDoc(doc(db, "balance_requests", docId), { status: "Rejected" });
+};
+
+window.completeOrder = async (docId) => {
+    if(!confirm(`অর্ডারটি কমপ্লিট করা হয়েছে?`)) return;
+    await updateDoc(doc(db, "orders", docId), { status: "Complete" });
+    loadDashboard(); loadSalesAnalytics();
+};
+
+window.cancelOrder = async (docId, userUid, amount) => {
+    if(!confirm(`অর্ডার বাতিল করে ৳${amount} রিফান্ড করবেন?`)) return;
+    try {
+        const batch = writeBatch(db);
+        batch.update(doc(db, "users", userUid), { balance: increment(amount) });
+        batch.update(doc(db, "orders", docId), { status: "Cancelled" });
+        await batch.commit();
+        loadDashboard();
+    } catch (e) { alert("Error: " + e.message); }
+};
+
+// ===========================
+// Live Notification Logic
+// ===========================
+function showLiveNotification(message) {
+    const box = document.getElementById("liveNotification");
+    const text = document.getElementById("liveMessage");
+    const sound = document.getElementById("notificationSound");
+
+    text.innerText = message;
+    box.classList.remove("hidden");
+    
+    if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+    }
+
+    setTimeout(() => { box.classList.add("hidden"); }, 5000);
+}
+
+let firstLoad = true;
+onSnapshot(query(collection(db, "balance_requests"), orderBy("createdAt", "desc")), (snapshot) => {
+    if (firstLoad) { firstLoad = false; return; }
+    if (snapshot.empty) return;
+    
+    const newest = snapshot.docs[0].data();
+    if (newest.status === "Pending") {
+        showLiveNotification(`Add Money: ৳${newest.amount}\n${newest.email}`);
+        loadDashboard();
+    }
+});
+
+let firstOrderLoad = true;
+onSnapshot(query(collection(db, "orders"), orderBy("createdAt", "desc")), (snapshot) => {
+    if (firstOrderLoad) { firstOrderLoad = false; return; }
+    if (snapshot.empty) return;
+    
+    const newest = snapshot.docs[0].data();
+    if (newest.status === "Pending") {
+        showLiveNotification(`New Order: ${newest.packageName}\nUID: ${newest.playerUID}`);
+        loadDashboard();
+    }
+});
+
+// Initial Load
+loadDashboard();
+loadSalesAnalytics();
+</script>
+
+</body>
+</html>

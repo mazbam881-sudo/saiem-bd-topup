@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Management - Saiem Bd</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style> ::-webkit-scrollbar { display: none; } </style>
+</head>
+
+<body class="bg-gray-900 text-white pb-20">
+
+<header class="bg-gray-800 shadow-md sticky top-0 z-50 border-b border-gray-700">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+        <div class="flex items-center gap-3">
+            <a href="admin.html" class="text-gray-400 hover:text-white transition mr-2"><i class="fa-solid fa-arrow-left text-xl"></i></a>
+            <h1 class="text-lg font-black text-white tracking-wide">ORDER <span class="text-blue-500">MANAGEMENT</span></h1>
+        </div>
+    </div>
+</header>
+
+<div class="max-w-7xl mx-auto p-6">
+    <div id="orderList" class="space-y-4">
+        <div class="bg-gray-800 rounded-xl shadow p-8 text-center text-gray-400 border border-gray-700">
+            <i class="fa-solid fa-spinner fa-spin text-2xl text-blue-500 mb-2"></i><br>Loading Orders...
+        </div>
+    </div>
+</div>
+
+<script type="module">
+// পাথ ঠিক করা হয়েছে
+import { auth, db } from "../js/firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { collection, query, orderBy, getDocs, doc, getDoc, updateDoc, writeBatch, increment } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const ADMIN_EMAIL = "mazbam881@gmail.com";
+const orderList = document.getElementById("orderList");
+
+onAuthStateChanged(auth, (user) => {
+  if (!user || user.email !== ADMIN_EMAIL) {
+    window.location.replace("admin-login.html");
+    return;
+  }
+  loadOrders();
+});
+
+async function loadOrders() {
+  orderList.innerHTML = "";
+  const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+  const snapshot = await getDocs(q);
+
+  if (snapshot.empty) {
+    orderList.innerHTML = `<div class="bg-gray-800 rounded-xl shadow p-8 text-center border border-gray-700 text-gray-400">No Orders Found</div>`;
+    return;
+  }
+
+  snapshot.forEach((order) => {
+    const data = order.data();
+    const orderId = order.id;
+
+    let statusColor = "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
+    if (data.status === "Approved" || data.status === "Complete") statusColor = "text-green-400 bg-green-400/10 border-green-400/20";
+    else if (data.status === "Rejected" || data.status === "Cancelled") statusColor = "text-red-400 bg-red-400/10 border-red-400/20";
+
+    orderList.innerHTML += `
+      <div class="bg-gray-800 border border-gray-700 rounded-xl shadow p-5">
+        <div class="flex items-center justify-between gap-4 border-b border-gray-700 pb-3 mb-3">
+          <h2 class="text-lg font-bold text-white"><i class="fa-solid fa-gem text-blue-500 mr-2"></i>${data.packageName}</h2>
+          <span class="px-3 py-1 text-xs rounded-full border ${statusColor} font-bold">${data.status || "Pending"}</span>
+        </div>
+        <div class="space-y-1 text-sm text-gray-300">
+          <p><b class="text-gray-400">Player UID:</b> <span class="font-mono text-white">${data.playerUID}</span></p>
+          <p><b class="text-gray-400">Email:</b> ${data.email}</p>
+          <p><b class="text-gray-400">Amount:</b> <span class="text-white font-bold">৳${data.amount}</span></p>
+        </div>
+        ${data.status === "Pending" ? `
+          <div class="grid grid-cols-2 gap-3 mt-5 border-t border-gray-700 pt-4">
+            <button onclick="approveOrder('${orderId}')" class="bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold shadow transition">Complete Order</button>
+            <button onclick="rejectOrder('${orderId}', '${data.uid}', ${data.amount})" class="bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold shadow transition">Cancel & Refund</button>
+          </div>
+        ` : ``}
+      </div>
+    `;
+  });
+}
+
+window.approveOrder = async (orderId) => {
+  if(!confirm("Are you sure you want to Complete this order?")) return;
+  try {
+    await updateDoc(doc(db, "orders", orderId), { status: "Complete" });
+    alert("Order Approved Successfully!");
+    loadOrders();
+  } catch (error) { console.error(error); alert(error.message); }
+};
+
+window.rejectOrder = async (orderId, userUid, amount) => {
+  if(!confirm("Are you sure you want to Cancel and Refund this order?")) return;
+  try {
+    const batch = writeBatch(db);
+    batch.update(doc(db, "users", userUid), { balance: increment(amount) });
+    batch.update(doc(db, "orders", orderId), { status: "Cancelled" });
+    await batch.commit();
+    alert("Order Cancelled and Balance Refunded!");
+    loadOrders();
+  } catch (error) { console.error(error); alert(error.message); }
+};
+</script>
+</body>
+</html>

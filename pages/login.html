@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Saiem Bd Top Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 text-white">
+
+<!-- Header (Dark + Blue Theme) -->
+<header class="bg-gray-800 shadow-md sticky top-0 z-50 border-b border-gray-700">
+<div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <!-- Logo (Added link to go back to Home) -->
+    <a href="../index.html" class="flex items-center gap-3 hover:opacity-90">
+        <div class="bg-blue-600 text-white px-3 py-1.5 rounded-lg font-extrabold text-sm shadow-md">
+            Saiem Bd
+        </div>
+        <div>
+            <h1 class="text-xl font-black text-white tracking-wide">
+                SAIEM BD <span class="text-blue-500">TOPUP</span>
+            </h1>
+        </div>
+    </a>
+
+    <div class="flex items-center gap-2">
+        <a href="register.html" class="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg font-bold hover:bg-gray-600 transition shadow">
+            Register
+        </a>
+        <a href="login.html" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold transition shadow-md">
+            Login
+        </a>
+    </div>
+</div>
+</header>
+
+<!-- Login Form -->
+<div class="max-w-md mx-auto mt-12 bg-gray-800 rounded-2xl shadow-lg border border-gray-700 p-8">
+
+    <h2 class="text-3xl font-black text-center text-white mb-2">Login</h2>
+    <p class="text-center text-gray-400 mb-8 text-sm">Login to your Saiem Bd Top Up account</p>
+
+    <form id="loginForm">
+        <label class="font-semibold text-gray-300 text-sm">Email Address</label>
+        <input type="email" id="email" placeholder="Enter Your Email" required
+            class="w-full mt-2 mb-5 bg-gray-900 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:border-blue-500 transition">
+
+        <label class="font-semibold text-gray-300 text-sm">Password</label>
+        <div class="relative">
+            <input type="password" id="password" placeholder="Enter Password" required
+                class="w-full mt-2 bg-gray-900 border border-gray-600 text-white rounded-lg p-3 pr-12 focus:outline-none focus:border-blue-500 transition">
+            
+            <button type="button" id="togglePassword" class="absolute right-4 top-6 text-gray-400 hover:text-white transition">
+                <i class="fa-solid fa-eye"></i>
+            </button>
+        </div>
+
+        <!-- Forgot Password Button -->
+        <div class="flex justify-end mt-2">
+            <button type="button" id="forgotPasswordBtn" class="text-sm font-semibold text-blue-500 hover:text-blue-400 hover:underline transition">
+                Forgot Password?
+            </button>
+        </div>
+
+        <button type="submit" class="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg font-bold transition shadow-lg">
+            LOGIN
+        </button>
+
+        <button type="button" id="googleLoginBtn" class="w-full mt-4 bg-gray-700 border border-gray-600 hover:bg-gray-600 text-white py-3 rounded-lg text-lg font-bold flex items-center justify-center gap-2 transition shadow">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
+            Sign in with Google
+        </button>
+    </form>
+
+    <p id="message" class="text-center mt-4 font-semibold text-sm"></p>
+
+    <p class="text-center mt-6 text-gray-400 text-sm">
+        Don't have an account? 
+        <a href="register.html" class="text-blue-500 font-bold hover:underline transition">Register</a>
+    </p>
+
+</div>
+
+<!-- Footer -->
+<div class="text-center mt-10 mb-6 text-gray-500 text-xs">
+    © 2026 Saiem Bd Top Up. All Rights Reserved.
+</div>
+
+<script type="module">
+import { auth, db } from "../js/firebase.js"; 
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const loginForm = document.getElementById("loginForm");
+const message = document.getElementById("message");
+const googleLoginBtn = document.getElementById("googleLoginBtn");
+const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+
+// Email/Password Login
+loginForm.addEventListener("submit", async(e)=>{
+    e.preventDefault();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    try{
+        await signInWithEmailAndPassword(auth, email, password);
+        message.innerHTML = "✅ Login Successful";
+        message.className = "text-center mt-4 font-semibold text-green-400 text-sm";
+        setTimeout(()=>{ window.location.href = "dashboard.html"; }, 1200);
+    }catch(error){
+        console.log(error.message);
+        message.innerHTML = "❌ Email অথবা Password ভুল হয়েছে";
+        message.className = "text-center mt-4 font-semibold text-red-400 text-sm";
+    }
+});
+
+// Google Login
+googleLoginBtn.addEventListener("click", async()=>{
+    try{
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if(!userSnap.exists()){
+            await setDoc(userRef, {
+                fullname: user.displayName || "Google User",
+                mobile: "",
+                email: user.email || "",
+                balance: 0
+            });
+        }
+        message.innerHTML = "✅ Google Login Successful";
+        message.className = "text-center mt-4 font-semibold text-green-400 text-sm";
+        setTimeout(()=>{ window.location.href = "dashboard.html"; }, 1200);
+    }catch(error){
+        console.log(error);
+        message.innerHTML = "❌ Google Login Failed";
+        message.className = "text-center mt-4 font-semibold text-red-400 text-sm";
+    }
+});
+
+// Forgot Password Logic
+forgotPasswordBtn.addEventListener("click", async () => {
+    const email = document.getElementById("email").value.trim();
+    if (!email) {
+        message.innerHTML = "❌ অনুগ্রহ করে আগে ইমেইল বক্সে আপনার ইমেইলটি লিখুন।";
+        message.className = "text-center mt-4 font-semibold text-red-400 text-sm";
+        return;
+    }
+    try {
+        await sendPasswordResetEmail(auth, email);
+        message.innerHTML = "✅ Password Reset লিংক আপনার ইমেইলে পাঠানো হয়েছে!";
+        message.className = "text-center mt-4 font-semibold text-green-400 text-sm";
+    } catch (error) {
+        console.log(error.message);
+        message.innerHTML = "❌ অ্যাকাউন্ট খুঁজে পাওয়া যায়নি বা ইমেইল ভুল।";
+        message.className = "text-center mt-4 font-semibold text-red-400 text-sm";
+    }
+});
+
+// Password Show Hide
+const passwordInput = document.getElementById("password");
+const togglePassword = document.getElementById("togglePassword");
+
+togglePassword.addEventListener("click",()=>{
+    if(passwordInput.type === "password"){
+        passwordInput.type = "text";
+        togglePassword.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+    }else{
+        passwordInput.type = "password";
+        togglePassword.innerHTML = '<i class="fa-solid fa-eye"></i>';
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saiem Bd Top Up - Free Fire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+      ::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white pb-20">
+
+<!-- Header (Dark + Blue Theme) -->
+<header class="bg-gray-800 shadow-md sticky top-0 z-50 border-b border-gray-700">
+    <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+        
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-600 text-white px-3 py-1.5 rounded-lg font-extrabold text-sm shadow-md">
+                Saiem Bd
+            </div>
+            <div>
+                <h1 class="text-xl md:text-2xl font-black text-white tracking-wide">
+                    SAIEM BD <span class="text-blue-500">TOPUP</span>
+                </h1>
+            </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="flex items-center gap-3">
+            <!-- Wallet -->
+            <div id="walletBox" class="hidden bg-gray-700 border border-gray-600 text-blue-400 px-3.5 py-1.5 rounded-lg font-bold text-sm">
+                💰 <span id="walletBalance">0</span>৳
+            </div>
+
+            <a href="pages/dashboard.html" id="dashboardBtn" class="hidden px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-lg transition shadow-md">
+                Dashboard
+            </a>
+
+            <a href="pages/login.html" id="loginBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-sm transition shadow-md">
+                Login
+            </a>
+
+            <button id="logoutBtn" class="hidden px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold text-sm transition shadow-md">
+                Logout
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Marquee Notice -->
+<div class="bg-gray-800 border-y border-gray-700 text-sm flex items-center overflow-hidden">
+    <div class="bg-blue-600 text-white font-bold px-4 py-2.5 z-10 whitespace-nowrap flex items-center gap-2 shadow-lg">
+        <i class="fa-solid fa-bullhorn text-yellow-400"></i> Notice
+    </div>
+    <marquee class="font-medium text-gray-200 py-2.5">
+        স্বাগতম Saiem Bd Top Up-এ! ভুল UID দিলে ডায়মন্ড না এলে কর্তৃপক্ষ দায়ী নয়। সর্বদা সঠিক UID চেক করে অর্ডার দিন। যেকোনো সমস্যায় আমাদের হোয়াটসঅ্যাপ নম্বরে যোগাযোগ করুন: ০১৮৭৫০৪৫৯১২
+    </marquee>
+</div>
+
+<!-- Banner Slider -->
+<div class="max-w-6xl mx-auto px-4 mt-6">
+    <div class="relative w-full h-40 md:h-72 rounded-2xl overflow-hidden shadow-2xl border border-gray-700 bg-gray-800">
+        <img id="sliderImage" src="https://via.placeholder.com/1200x400/1e3a8a/ffffff?text=Welcome+to+Saiem+Bd+Top+Up" class="w-full h-full object-cover transition-opacity duration-500">
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-50"></div>
+    </div>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <h2 class="text-xl md:text-2xl font-bold mb-6 border-l-4 border-blue-500 pl-3">Popular Services</h2>
+
+    <!-- All 5 Products (Images are back!) -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+        
+        <div onclick="goToTopup()" class="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden shadow hover:border-blue-500 hover:shadow-[0_0_15px_rgba(59,130,246,0.4)] transition cursor-pointer group">
+            <div class="h-28 md:h-36 bg-gray-700 overflow-hidden relative">
+                <img src="https://via.placeholder.com/300x200/1f2937/3b82f6?text=UID+TopUp" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+            </div>
+            <div class="p-4 text-center">
+                <h3 class="font-bold text-blue-400">UID TopUp</h3>
+                <p class="text-xs text-gray-400 mt-1">Free Fire</p>
+            </div>
+        </div>
+
+        <div onclick="window.location.href='pages/weekly.html'" class="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden shadow hover:border-blue-500 hover:shadow-[0_0_15px_rgba(59,130,246,0.4)] transition cursor-pointer group">
+            <div class="h-28 md:h-36 bg-gray-700 overflow-hidden relative">
+                <img src="https://via.placeholder.com/300x200/1f2937/3b82f6?text=Weekly" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+            </div>
+            <div class="p-4 text-center">
+                <h3 class="font-bold text-blue-400">Weekly/Monthly</h3>
+                <p class="text-xs text-gray-400 mt-1">Membership</p>
+            </div>
+        </div>
+
+        <div onclick="window.location.href='pages/levelup.html'" class="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden shadow hover:border-blue-500 hover:shadow-[0_0_15px_rgba(59,130,246,0.4)] transition cursor-pointer group">
+            <div class="h-28 md:h-36 bg-gray-700 overflow-hidden relative">
+                <img src="https://via.placeholder.com/300x200/1f2937/3b82f6?text=Level+Up" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+            </div>
+            <div class="p-4 text-center">
+                <h3 class="font-bold text-blue-400">Level Up Pass</h3>
+                <p class="text-xs text-gray-400 mt-1">Special Offer</p>
+            </div>
+        </div>
+
+        <div onclick="window.location.href='pages/weekly-lite.html'" class="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden shadow hover:border-blue-500 hover:shadow-[0_0_15px_rgba(59,130,246,0.4)] transition cursor-pointer group">
+            <div class="h-28 md:h-36 bg-gray-700 overflow-hidden relative">
+                <img src="https://via.placeholder.com/300x200/1f2937/3b82f6?text=Weekly+Lite" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+            </div>
+            <div class="p-4 text-center">
+                <h3 class="font-bold text-blue-400">Weekly Lite</h3>
+                <p class="text-xs text-gray-400 mt-1">Membership</p>
+            </div>
+        </div>
+
+        <div onclick="window.location.href='pages/indonesia.html'" class="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden shadow hover:border-blue-500 hover:shadow-[0_0_15px_rgba(59,130,246,0.4)] transition cursor-pointer group">
+            <div class="h-28 md:h-36 bg-gray-700 overflow-hidden relative">
+                <img src="https://via.placeholder.com/300x200/1f2937/3b82f6?text=Indonesia" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+            </div>
+            <div class="p-4 text-center">
+                <h3 class="font-bold text-blue-400">Indonesia TopUp</h3>
+                <p class="text-xs text-gray-400 mt-1">Server Direct</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Live Latest Orders -->
+    <div class="mt-12 mb-10">
+        <h2 class="text-xl md:text-2xl font-bold mb-6 border-l-4 border-blue-500 pl-3">Live Latest Orders</h2>
+        
+        <!-- Clean List matching Lowbazar style -->
+        <div id="latest-orders" class="bg-gray-800 border border-gray-700 rounded-2xl shadow-lg p-6 text-gray-400 transition-all min-h-[150px] flex flex-col justify-center">
+            <div class="text-center">
+                <i class="fa-solid fa-spinner fa-spin text-2xl mb-3 text-blue-500"></i><br>
+                অর্ডার লোড হচ্ছে...
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Bottom Mobile Nav -->
+<nav class="fixed bottom-0 left-0 w-full bg-gray-800 border-t border-gray-700 shadow-lg md:hidden z-50">
+    <div class="grid grid-cols-4 text-center py-2">
+        <a href="index.html" class="text-blue-500">
+            <i class="fa-solid fa-house text-xl mb-1"></i>
+            <p class="text-[10px] font-bold">Home</p>
+        </a>
+        <a href="pages/tracking.html" class="text-gray-400 hover:text-blue-500 transition">
+            <i class="fa-solid fa-box text-xl mb-1"></i>
+            <p class="text-[10px] font-semibold">Orders</p>
+        </a>
+        <a href="pages/wallet.html" class="text-gray-400 hover:text-blue-500 transition">
+            <i class="fa-solid fa-wallet text-xl mb-1"></i>
+            <p class="text-[10px] font-semibold">Wallet</p>
+        </a>
+        <a href="pages/dashboard.html" class="text-gray-400 hover:text-blue-500 transition">
+            <i class="fa-solid fa-user text-xl mb-1"></i>
+            <p class="text-[10px] font-semibold">Account</p>
+        </a>
+    </div>
+</nav>
+
+<script>
+// Slider Logic
+const images = [
+    "https://via.placeholder.com/1200x400/1e3a8a/ffffff?text=Welcome+to+Saiem+Bd+Top+Up",
+    "https://via.placeholder.com/1200x400/172554/ffffff?text=Fastest+Delivery+in+Bangladesh",
+    "https://via.placeholder.com/1200x400/0f172a/3b82f6?text=100%25+Trusted+Platform"
+];
+let currentIndex = 0;
+const sliderImage = document.getElementById("sliderImage");
+
+setInterval(() => {
+    currentIndex = (currentIndex + 1) % images.length;
+    sliderImage.style.opacity = 0; 
+    setTimeout(() => {
+        sliderImage.src = images[currentIndex];
+        sliderImage.style.opacity = 1; 
+    }, 500);
+}, 4000); 
+
+function goToTopup() {
+    window.location.href = "pages/topup.html";
+}
+</script>
+
+<!-- Firebase Script -->
+<script type="module">
+import { auth, db } from "./js/firebase.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { doc, getDoc, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+// Login Header
+const dashboardBtn = document.getElementById("dashboardBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const loginBtn = document.getElementById("loginBtn");
+const walletBox = document.getElementById("walletBox");
+const walletBalance = document.getElementById("walletBalance");
+
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        dashboardBtn.classList.remove("hidden");
+        logoutBtn.classList.remove("hidden");
+        walletBox.classList.remove("hidden");
+        loginBtn.classList.add("hidden");
+
+        try {
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                walletBalance.innerText = userSnap.data().balance ?? 0;
+            }
+        } catch (error) {
+            console.log("Error loading balance:", error);
+        }
+    } else {
+        dashboardBtn.classList.add("hidden");
+        logoutBtn.classList.add("hidden");
+        walletBox.classList.add("hidden");
+        loginBtn.classList.remove("hidden");
+        walletBalance.innerText = 0;
+    }
+});
+
+logoutBtn.addEventListener("click", async () => {
+    try {
+        await signOut(auth);
+        window.location.reload();
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+// Live Latest Orders
+const latestOrdersContainer = document.getElementById("latest-orders");
+
+try {
+    const q = query(collection(db, "orders"), orderBy("createdAt", "desc"), limit(5));
+    
+    onSnapshot(q, (snapshot) => {
+        if (snapshot.empty) {
+            latestOrdersContainer.innerHTML = `
+                <div class="text-center">
+                    <i class="fa-solid fa-box-open text-4xl text-gray-600 mb-3"></i>
+                    <p class="text-gray-400">এখনও কোনো অর্ডার আসেনি!</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = `<div class="space-y-3">`;
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            
+            // UID Masking (e.g. 1234****89)
+            let rawUID = data.playerUID ? data.playerUID.toString() : "N/A";
+            let maskedUID = rawUID.length > 5 ? rawUID.substring(0, 4) + "****" + rawUID.slice(-2) : rawUID;
+            
+            let statusColor = "text-yellow-400";
+            if(data.status === "Complete" || data.status === "Approved") statusColor = "text-green-400";
+            if(data.status === "Cancelled" || data.status === "Rejected") statusColor = "text-red-400";
+
+            html += `
+            <div class="bg-gray-900 border border-gray-700 rounded-xl p-3 flex justify-between items-center shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded bg-gray-800 border border-gray-600 flex items-center justify-center">
+                        <i class="fa-solid fa-gem text-blue-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-white">${data.packageName}</p>
+                        <p class="text-xs text-gray-400 font-mono mt-0.5">UID: ${maskedUID}</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-black text-white">৳${data.amount}</p>
+                    <p class="text-[10px] font-bold ${statusColor} mt-0.5">${data.status}</p>
+                </div>
+            </div>
+            `;
+        });
+        html += `</div>`;
+        
+        latestOrdersContainer.innerHTML = html;
+        
+    }, (error) => {
+        console.error("Error fetching live orders:", error);
+    });
+
+} catch (error) {
+    console.error("Live Order Setup error:", error);
+}
+
+</script>
+</body>
+</html>

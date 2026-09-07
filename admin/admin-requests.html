@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Balance Requests - Saiem Bd</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style> ::-webkit-scrollbar { display: none; } </style>
+</head>
+
+<body class="bg-gray-900 text-white pb-20">
+
+<!-- Header -->
+<header class="bg-gray-800 shadow-md sticky top-0 z-50 border-b border-gray-700">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+        <div class="flex items-center gap-3">
+            <a href="admin.html" class="text-gray-400 hover:text-white transition mr-2"><i class="fa-solid fa-arrow-left text-xl"></i></a>
+            <h1 class="text-lg font-black text-white tracking-wide">BALANCE <span class="text-blue-500">REQUESTS</span></h1>
+        </div>
+    </div>
+</header>
+
+<div class="max-w-7xl mx-auto p-6">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-gray-800 border-b-4 border-blue-500 rounded-xl p-5 shadow-lg">
+            <p class="text-sm text-gray-400 font-bold mb-1">Total Requests</p>
+            <h2 id="totalRequests" class="text-3xl font-black text-white">0</h2>
+        </div>
+        <div class="bg-gray-800 border-b-4 border-yellow-500 rounded-xl p-5 shadow-lg">
+            <p class="text-sm text-gray-400 font-bold mb-1">Pending</p>
+            <h2 id="pendingCount" class="text-3xl font-black text-white">0</h2>
+        </div>
+        <div class="bg-gray-800 border-b-4 border-green-500 rounded-xl p-5 shadow-lg">
+            <p class="text-sm text-gray-400 font-bold mb-1">Approved</p>
+            <h2 id="approvedCount" class="text-3xl font-black text-white">0</h2>
+        </div>
+        <div class="bg-gray-800 border-b-4 border-red-500 rounded-xl p-5 shadow-lg">
+            <p class="text-sm text-gray-400 font-bold mb-1">Rejected</p>
+            <h2 id="rejectedCount" class="text-3xl font-black text-white">0</h2>
+        </div>
+    </div>
+
+    <!-- Requests List -->
+    <div id="requestList" class="space-y-4">
+        <div class="bg-gray-800 rounded-xl shadow p-8 text-center text-gray-400 border border-gray-700">
+            <i class="fa-solid fa-spinner fa-spin text-2xl text-blue-500 mb-2"></i><br>Loading Requests...
+        </div>
+    </div>
+</div>
+
+<script type="module">
+import { auth, db } from "../js/firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { collection, query, orderBy, getDocs, doc, getDoc, updateDoc, getCountFromServer } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const ADMIN_EMAIL = "mazbam881@gmail.com";
+const requestList = document.getElementById("requestList");
+
+onAuthStateChanged(auth, (user) => {
+    if (!user || user.email !== ADMIN_EMAIL) { window.location.href = "admin-login.html"; return; }
+    loadRequests();
+});
+
+async function loadRequests() {
+    requestList.innerHTML = "";
+    let pending = 0, approved = 0, rejected = 0;
+    
+    const q = query(collection(db, "balance_requests"), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+        requestList.innerHTML = `<div class="bg-gray-800 rounded-xl p-8 text-center border border-gray-700 text-gray-400">No Requests Found</div>`;
+        return;
+    }
+
+    snapshot.forEach((request) => {
+        const data = request.data();
+        const reqId = request.id;
+
+        if (data.status === "Pending") pending++;
+        if (data.status === "Approved") approved++;
+        if (data.status === "Rejected") rejected++;
+
+        let statusColor = "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
+        if (data.status === "Approved") statusColor = "text-green-400 bg-green-400/10 border-green-400/20";
+        if (data.status === "Rejected") statusColor = "text-red-400 bg-red-400/10 border-red-400/20";
+
+        requestList.innerHTML += `
+            <div class="bg-gray-800 border border-gray-700 rounded-xl shadow p-5">
+                <div class="flex items-center justify-between gap-4 border-b border-gray-700 pb-3 mb-3">
+                    <h2 class="text-lg font-bold text-white"><i class="fa-solid fa-envelope text-blue-500 mr-2"></i>${data.email}</h2>
+                    <span class="px-3 py-1 text-xs rounded-full border ${statusColor} font-bold">${data.status}</span>
+                </div>
+                <div class="space-y-1 text-sm text-gray-300">
+                    <p><b class="text-gray-400">Method:</b> ${data.paymentMethod}</p>
+                    <p><b class="text-gray-400">TRX ID:</b> <span class="font-mono text-blue-400">${data.trxId}</span></p>
+                    <p><b class="text-gray-400">Amount:</b> <span class="text-white font-bold text-lg">৳${data.amount}</span></p>
+                </div>
+                ${data.status === "Pending" ? `
+                <div class="grid grid-cols-2 gap-3 mt-5 border-t border-gray-700 pt-4">
+                    <button onclick="approveRequest('${reqId}', '${data.uid}', ${data.amount})" class="bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold transition">Approve</button>
+                    <button onclick="rejectRequest('${reqId}')" class="bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold transition">Reject</button>
+                </div>` : ``}
+            </div>
+        `;
+    });
+
+    document.getElementById("totalRequests").innerText = pending + approved + rejected;
+    document.getElementById("pendingCount").innerText = pending;
+    document.getElementById("approvedCount").innerText = approved;
+    document.getElementById("rejectedCount").innerText = rejected;
+}
+
+window.approveRequest = async (reqId, uid, amount) => {
+    if(!confirm("Are you sure you want to approve?")) return;
+    try {
+        const userRef = doc(db, "users", uid);
+        const userSnap = await getDoc(userRef);
+        const currentBalance = Number(userSnap.data().balance || 0);
+        
+        await updateDoc(userRef, { balance: currentBalance + amount });
+        await updateDoc(doc(db, "balance_requests", reqId), { status: "Approved" });
+        loadRequests();
+    } catch(e) { alert(e.message); }
+};
+
+window.rejectRequest = async (reqId) => {
+    if(!confirm("Are you sure you want to reject?")) return;
+    await updateDoc(doc(db, "balance_requests", reqId), { status: "Rejected" });
+    loadRequests();
+};
+</script>
+</body>
+</html>
