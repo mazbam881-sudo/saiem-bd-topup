@@ -111,6 +111,7 @@ async function sendTelegramMessage(message) {
     try {
         await fetch(SCRIPT_URL, {
             method: "POST",
+            mode: "no-cors", // এই লাইনটি ব্রাউজারের ব্লক ছাড়িয়ে দেবে
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({ message: message })
         });
