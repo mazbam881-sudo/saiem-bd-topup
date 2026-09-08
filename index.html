@@ -19,6 +19,7 @@
       body { font-family: 'Poppins', sans-serif; }
       ::-webkit-scrollbar { display: none; }
   </style>
+  <link rel="manifest" href="manifest.json">
 </head>
 <body class="bg-gray-50 text-gray-800 pb-20 md:pb-0 overflow-x-hidden">
 
@@ -323,58 +324,82 @@
 </div>
 
 <!-- ======================================= -->
-<!-- FULL DESKTOP GRID FOOTER -->
+<!-- RESPONSIVE FOOTER (Low Bazar Style) -->
 <!-- ======================================= -->
 <div class="bg-white border-t border-gray-200 mt-6 pt-10 pb-8 px-4">
     <div class="max-w-6xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-            <div>
+            
+            <!-- 1. Logo & Info -->
+            <div class="flex flex-col items-start text-left">
                 <img src="logo.png" alt="Saiem Bd Top Up" class="h-10 md:h-12 object-contain mb-4">
                 <p class="text-gray-500 text-[14px] font-medium mb-1">Saiem Bd Top Up এ ২৪ ঘণ্টাই টপআপ চালু থাকে ...!!!</p>
-                <p class="text-gray-500 text-[14px] font-medium">Whatsapp : 01976327934</p>
+                <p class="text-gray-500 text-[14px] font-medium">Whatsapp : +8801976327934</p>
             </div>
-            <div>
-                <h4 class="font-bold text-gray-900 mb-4 text-[16px]">Quick Links</h4>
-                <ul class="text-gray-500 text-[14px] space-y-2.5 font-medium">
-                    <li><a href="index.html" class="hover:text-[#ff2a2a] transition">Home</a></li>
-                    <li><a href="#" class="hover:text-[#ff2a2a] transition">Products</a></li>
-                    <li><a href="#" class="hover:text-[#ff2a2a] transition">Contact</a></li>
-                </ul>
+            
+            <!-- 2 & 3. Quick Links & Legal (Side-by-side on mobile) -->
+            <div class="grid grid-cols-2 gap-4 md:col-span-2 md:gap-8">
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4 text-[16px]">Quick Links</h4>
+                    <ul class="text-gray-500 text-[14px] space-y-2.5 font-medium text-left">
+                        <li><a href="index.html" class="hover:text-[#ff2a2a] transition">Home</a></li>
+                        <li><a href="#" class="hover:text-[#ff2a2a] transition">Products</a></li>
+                        <li><a href="#" class="hover:text-[#ff2a2a] transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4 text-[16px]">Legal</h4>
+                    <ul class="text-gray-500 text-[14px] space-y-2.5 font-medium text-left">
+                        <li><a href="#" class="hover:text-[#ff2a2a] transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-[#ff2a2a] transition">Terms of Service</a></li>
+                    </ul>
+                </div>
             </div>
-            <div>
-                <h4 class="font-bold text-gray-900 mb-4 text-[16px]">Legal</h4>
-                <ul class="text-gray-500 text-[14px] space-y-2.5 font-medium">
-                    <li><a href="#" class="hover:text-[#ff2a2a] transition">Privacy Policy</a></li>
-                    <li><a href="#" class="hover:text-[#ff2a2a] transition">Terms of Service</a></li>
-                </ul>
+
+            <!-- Mobile Only Social Icons (Centered) -->
+            <div class="flex md:hidden justify-center gap-4 mt-2 w-full">
+                <a href="#" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:text-[#ff2a2a] hover:border-[#ff2a2a] transition shadow-sm">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:text-[#ff2a2a] hover:border-[#ff2a2a] transition shadow-sm">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
             </div>
-            <div>
-                <h4 class="font-bold text-gray-900 mb-4 text-[16px]">Contact Us</h4>
-                <div class="space-y-3">
-                    <div class="bg-gray-50 border border-gray-100 rounded-lg p-3 flex items-center gap-3">
-                        <i class="fa-solid fa-phone text-gray-400 text-lg"></i>
-                        <div>
+            
+            <!-- 4. Contact Us -->
+            <div class="flex flex-col items-start text-left mt-2 md:mt-0">
+                <h4 class="font-bold text-gray-900 mb-4 text-[18px] md:text-[16px]">Contact Us</h4>
+                <!-- Grid: 2 columns on mobile, 1 column on desktop -->
+                <div class="grid grid-cols-2 md:grid-cols-1 gap-3 w-full">
+                    <div class="bg-white md:bg-gray-50 border border-gray-100 rounded-lg p-3 flex items-center gap-3 shadow-[0_2px_10px_rgba(0,0,0,0.04)] md:shadow-none">
+                        <i class="fa-solid fa-phone text-gray-400 text-lg shrink-0"></i>
+                        <div class="overflow-hidden">
                             <p class="text-gray-500 text-[11px]">Phone</p>
-                            <p class="text-gray-800 text-[13px] font-medium">+8801976327934</p>
+                            <p class="text-gray-800 text-[11px] md:text-[13px] font-medium truncate">+8801976327934</p>
                         </div>
                     </div>
-                    <div class="bg-gray-50 border border-gray-100 rounded-lg p-3 flex items-center gap-3">
-                        <i class="fa-regular fa-envelope text-gray-400 text-lg"></i>
-                        <div>
+                    <div class="bg-white md:bg-gray-50 border border-gray-100 rounded-lg p-3 flex items-center gap-3 shadow-[0_2px_10px_rgba(0,0,0,0.04)] md:shadow-none">
+                        <i class="fa-regular fa-envelope text-gray-400 text-lg shrink-0"></i>
+                        <div class="overflow-hidden">
                             <p class="text-gray-500 text-[11px]">Email</p>
-                            <p class="text-gray-800 text-[12px] font-medium">support@saiembdtopup.com</p>
+                            <p class="text-gray-800 text-[10px] md:text-[12px] font-medium truncate">support@saiembdtopup.com</p>
                         </div>
                     </div>
                 </div>
             </div>
+            
         </div>
-        <div class="border-t border-gray-200 pt-6 flex flex-col md:flex-row items-center justify-between text-[13px] text-gray-500 gap-4">
+        
+        <!-- Bottom Section: Copyright & Developer -->
+        <div class="border-t border-gray-200 pt-6 flex flex-col md:flex-row items-center justify-between text-[13px] text-gray-500 gap-3 md:gap-4 text-center md:text-left">
             <p>© 2026 Saiem Bd Top Up | All Rights Reserved.</p>
-            <div class="flex gap-4 font-medium">
+            
+            <div class="hidden md:flex gap-4 font-medium">
                 <a href="#" class="hover:text-black transition">Facebook</a>
                 <a href="#" class="hover:text-black transition">Youtube</a>
             </div>
-            <p>Developed by <span class="text-[#ff2a2a] font-bold">FR Nahin</span></p>
+            
+            <p>Developed by <span class="text-[#ff2a2a] font-bold">Saiem</span></p>
         </div>
     </div>
 </div>
@@ -391,9 +416,9 @@
         </button>
         <h4 class="font-bold text-sm mb-1">Install App</h4>
         <p class="text-[10px] text-white/90 mb-3 leading-snug pr-4">Install our app for a better experience</p>
-        <a href="#" class="block w-full bg-white text-red-600 text-center font-bold text-xs py-2 rounded-lg hover:bg-gray-50 transition shadow-sm">
+        <button id="installBtnDesktop" class="block w-full bg-white text-red-600 text-center font-bold text-xs py-2 rounded-lg hover:bg-gray-50 transition shadow-sm">
             <i class="fa-solid fa-download mr-1"></i> Install Now
-        </a>
+        </button>
     </div>
 
     <!-- Mobile View (Horizontal Bar like Low Bazar) -->
@@ -406,9 +431,9 @@
             </div>
         </div>
         <div class="flex items-center gap-1.5">
-            <a href="#" class="bg-white text-[#ff2a2a] text-[10px] font-bold px-3 py-1.5 rounded shadow-sm">
+            <button id="installBtnMobile" class="bg-white text-[#ff2a2a] text-[10px] font-bold px-3 py-1.5 rounded shadow-sm">
                 Install
-            </a>
+            </button>
             <button onclick="document.getElementById('installAppBanner').style.display='none'" class="text-white hover:text-gray-200 transition px-2 py-1">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
@@ -763,6 +788,44 @@ try {
         reviewsContainer.innerHTML = `<div class="col-span-full text-center py-5 border border-dashed border-red-300 rounded-xl bg-red-50"><i class="fa-solid fa-triangle-exclamation text-red-500 text-2xl mb-2"></i><br><span class="text-red-600 font-bold text-sm">Firebase Rules Blocked!</span><br><span class="text-gray-500 text-xs">আপনার ফায়ারবেস রুলস ঠিকমতো পাবলিশ হয়নি।</span></div>`;
     });
 } catch(error) { console.error("Ratings Fetch Error:", error); }
+
+// ==========================================
+// PWA INSTALL APP LOGIC
+// ==========================================
+let deferredPrompt;
+const installBtnDesktop = document.getElementById('installBtnDesktop');
+const installBtnMobile = document.getElementById('installBtnMobile');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome from showing the prompt automatically
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+});
+
+const installApp = async () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+            document.getElementById('installAppBanner').style.display = 'none';
+        }
+        deferredPrompt = null;
+    } else {
+        alert("অ্যাপটি ইতিমধ্যে ইন্সটল করা আছে অথবা আপনার ব্রাউজার সাপোর্ট করছে না।");
+    }
+};
+
+if(installBtnDesktop) installBtnDesktop.addEventListener('click', installApp);
+if(installBtnMobile) installBtnMobile.addEventListener('click', installApp);
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(() => {
+        console.log('Service Worker Registered');
+    });
+}
 
 </script>
 </body>
