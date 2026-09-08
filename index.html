@@ -56,7 +56,7 @@
 </div>
 
 <!-- ======================================= -->
-<!-- Rating Modal (New Feature) -->
+<!-- Rating Modal -->
 <!-- ======================================= -->
 <div id="ratingModal" class="fixed inset-0 z-[120] flex items-center justify-center bg-black/70 hidden opacity-0 transition-opacity duration-300 px-4 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 relative transform scale-95 transition-transform duration-300" id="ratingContent">
@@ -67,7 +67,6 @@
         <h3 class="text-xl font-black text-gray-900 mb-2 text-center">আপনার মতামত দিন</h3>
         <p class="text-xs text-gray-500 text-center mb-5">আমাদের সার্ভিস আপনার কেমন লেগেছে তা স্টার দিয়ে জানান</p>
         
-        <!-- Interactive Stars -->
         <div class="flex justify-center gap-2 mb-6" id="starContainer">
             <i class="fa-solid fa-star text-gray-300 text-4xl cursor-pointer hover:scale-110 transition-transform" data-val="1"></i>
             <i class="fa-solid fa-star text-gray-300 text-4xl cursor-pointer hover:scale-110 transition-transform" data-val="2"></i>
@@ -84,7 +83,9 @@
     </div>
 </div>
 
+<!-- ======================================= -->
 <!-- Slide Menu Drawer -->
+<!-- ======================================= -->
 <div id="slideMenuOverlay" class="fixed inset-0 bg-black/50 z-[105] hidden transition-opacity duration-300 opacity-0 cursor-pointer"></div>
 
 <div id="slideMenu" class="fixed top-0 right-0 h-full w-[280px] bg-white z-[110] transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
@@ -116,7 +117,7 @@
         <a href="pages/wallet.html" class="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#ff2a2a] transition text-[13px] font-medium">
             <i class="fa-solid fa-circle-plus w-5 text-center text-gray-400"></i> Add Money
         </a>
-        <a href="https://wa.me/+8801976327934" class="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#ff2a2a] transition text-[13px] font-medium">
+        <a href="https://wa.me/+8801976327934" target="_blank" class="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#ff2a2a] transition text-[13px] font-medium">
             <i class="fa-regular fa-circle-question w-5 text-center text-gray-400"></i> Support
         </a>
         
@@ -128,7 +129,9 @@
     </div>
 </div>
 
+<!-- ======================================= -->
 <!-- Header -->
+<!-- ======================================= -->
 <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-200">
     <div class="max-w-6xl mx-auto flex justify-between items-center p-3 md:p-4">
         
@@ -136,20 +139,25 @@
             <img src="logo.png" alt="Saiem Bd Top Up" class="h-10 md:h-12 w-auto object-contain">
         </a>
 
-        <div id="loggedOutMenu" class="flex items-center gap-2 md:gap-3">
-            <a href="pages/register.html" class="hidden md:inline-block px-3 md:px-4 py-1.5 md:py-2 bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200 rounded md:rounded-lg font-semibold text-[11px] md:text-sm transition">
+        <!-- Logged OUT Menu (Fixed for Mobile) -->
+        <div id="loggedOutMenu" class="flex items-center gap-1.5 md:gap-3">
+            <a href="pages/register.html" class="px-2.5 md:px-4 py-1.5 md:py-2 bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200 rounded md:rounded-lg font-semibold text-[10px] md:text-sm transition">
                 Register
             </a>
-            <a href="pages/login.html" class="px-4 py-1.5 md:py-2 bg-[#111827] hover:bg-black text-white rounded md:rounded-lg font-semibold text-[11px] md:text-sm transition shadow-sm">
+            <a href="pages/login.html" class="px-3 md:px-4 py-1.5 md:py-2 bg-[#111827] hover:bg-black text-white rounded md:rounded-lg font-semibold text-[10px] md:text-sm transition shadow-sm">
                 Login
             </a>
         </div>
 
+        <!-- Logged IN Menu -->
         <div id="loggedInMenu" class="hidden items-center gap-2.5 md:gap-4">
-            <a href="pages/wallet.html" class="bg-[#ff2a2a] hover:bg-red-600 text-white px-2.5 md:px-3.5 py-1.5 rounded flex items-center gap-1.5 transition shadow-sm">
+            <!-- Balance Box (Links directly to Profile/Dashboard page) -->
+            <a href="pages/dashboard.html" class="bg-[#ff2a2a] hover:bg-red-600 text-white px-2.5 md:px-3.5 py-1.5 rounded flex items-center gap-1.5 transition shadow-sm">
                 <i class="fa-solid fa-wallet text-[10px] md:text-[13px]"></i>
                 <span class="font-bold text-[11px] md:text-sm tracking-wide"><span id="walletBalance">0</span>৳</span>
             </a>
+            
+            <!-- User Profile Picture (Opens Slide Menu) -->
             <button id="profileBtn" class="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border-2 border-gray-200 shadow-sm hover:border-blue-500 transition focus:outline-none bg-white">
                 <img id="userProfilePic" src="https://ui-avatars.com/api/?name=User&background=random" alt="Profile" class="w-full h-full object-cover">
             </button>
@@ -271,7 +279,7 @@
 </div>
 
 <!-- ======================================= -->
-<!-- NEW: CUSTOMER REVIEWS (RATING SECTION) -->
+<!-- CUSTOMER REVIEWS (RATING SECTION) -->
 <!-- ======================================= -->
 <div class="mt-14 mb-10 max-w-5xl mx-auto px-4">
     <div class="flex justify-between items-center mb-6 px-1 md:px-0 border-b border-gray-200 pb-3">
@@ -281,7 +289,6 @@
         </button>
     </div>
     
-    <!-- Reviews Grid -->
     <div id="reviewsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 px-1 md:px-0 min-h-[100px]">
         <div class="col-span-full text-center py-5 text-gray-500 font-medium">
             <i class="fa-solid fa-spinner fa-spin text-xl mb-2 text-yellow-500"></i><br>
@@ -373,17 +380,40 @@
 </div>
 
 <!-- ======================================= -->
-<!-- Fixed Left Install App Banner -->
+<!-- FIXED INSTALL APP BANNER (Responsive) -->
 <!-- ======================================= -->
-<div id="installAppBanner" class="fixed bottom-[70px] md:bottom-8 left-3 md:left-8 bg-[#ff2a2a] text-white rounded-xl shadow-2xl p-3 md:p-4 w-[160px] md:w-56 z-50 transform transition-transform duration-300">
-    <button onclick="document.getElementById('installAppBanner').style.display='none'" class="absolute top-2 right-2 text-white/80 hover:text-white transition p-1">
-        <i class="fa-solid fa-xmark text-xs md:text-sm"></i>
-    </button>
-    <h4 class="font-bold text-xs md:text-sm mb-1">Install App</h4>
-    <p class="text-[9px] md:text-[10px] text-white/90 mb-3 leading-snug pr-4">Install our app for a better experience</p>
-    <a href="#" class="block w-full bg-white text-red-600 text-center font-bold text-[10px] md:text-xs py-1.5 md:py-2 rounded-lg hover:bg-gray-50 transition shadow-sm">
-        <i class="fa-solid fa-download mr-1"></i> Install Now
-    </a>
+<div id="installAppBanner" class="fixed bottom-[60px] md:bottom-8 left-2 right-2 md:left-auto md:right-8 z-[60] transition-transform duration-300">
+    
+    <!-- Desktop View (Square Box on Right Side) -->
+    <div class="hidden md:block bg-[#ff2a2a] text-white rounded-xl shadow-2xl p-4 w-56 relative">
+        <button onclick="document.getElementById('installAppBanner').style.display='none'" class="absolute top-2 right-2.5 text-white/80 hover:text-white transition p-1">
+            <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+        <h4 class="font-bold text-sm mb-1">Install App</h4>
+        <p class="text-[10px] text-white/90 mb-3 leading-snug pr-4">Install our app for a better experience</p>
+        <a href="#" class="block w-full bg-white text-red-600 text-center font-bold text-xs py-2 rounded-lg hover:bg-gray-50 transition shadow-sm">
+            <i class="fa-solid fa-download mr-1"></i> Install Now
+        </a>
+    </div>
+
+    <!-- Mobile View (Horizontal Bar like Low Bazar) -->
+    <div class="md:hidden bg-[#ff2a2a] text-white rounded-lg shadow-lg p-2 flex items-center justify-between">
+        <div class="flex items-center gap-2 pl-1">
+            <i class="fa-solid fa-download text-base"></i>
+            <div class="leading-tight">
+                <h4 class="font-bold text-[11px]">Install App</h4>
+                <p class="text-[8px] text-white/90">For a better experience</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-1.5">
+            <a href="#" class="bg-white text-[#ff2a2a] text-[10px] font-bold px-3 py-1.5 rounded shadow-sm">
+                Install
+            </a>
+            <button onclick="document.getElementById('installAppBanner').style.display='none'" class="text-white hover:text-gray-200 transition px-2 py-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Bottom Mobile Nav -->
@@ -457,9 +487,9 @@ setInterval(() => {
 <script type="module">
 import { auth, db } from "./js/firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { doc, getDoc, collection, query, orderBy, limit, onSnapshot, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { doc, getDoc, collection, query, orderBy, limit, onSnapshot, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-// DOM
+// DOM Elements
 const loggedOutMenu = document.getElementById("loggedOutMenu");
 const loggedInMenu = document.getElementById("loggedInMenu");
 const walletBalance = document.getElementById("walletBalance");
@@ -476,13 +506,12 @@ const profileBtn = document.getElementById("profileBtn");
 
 let currentUser = null; // Store user globally for Rating
 
-// Slide Menu
+// Slide Menu Logic
 function openMenu() {
     slideMenuOverlay.classList.remove("hidden");
     setTimeout(() => slideMenuOverlay.classList.remove("opacity-0"), 10);
     slideMenu.classList.remove("translate-x-full");
 }
-
 function closeMenu() {
     slideMenu.classList.add("translate-x-full");
     slideMenuOverlay.classList.add("opacity-0");
@@ -497,7 +526,7 @@ slideLogoutBtn.addEventListener("click", async () => {
     try { await signOut(auth); window.location.reload(); } catch (error) { console.log(error); }
 });
 
-// Auth Logic
+// Auth State Logic
 onAuthStateChanged(auth, async (user) => {
     currentUser = user;
     if (user) {
@@ -535,7 +564,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Latest Orders Logic
+// Live Latest Orders Logic
 const latestOrdersContainer = document.getElementById("latest-orders");
 const bgColors = ["bg-blue-500", "bg-red-500", "bg-green-500", "bg-purple-500", "bg-pink-500", "bg-yellow-500"];
 
@@ -577,6 +606,9 @@ try {
             </div>`;
         });
         latestOrdersContainer.innerHTML = html;
+    }, (error) => { 
+        console.error("Live Order error:", error);
+        latestOrdersContainer.innerHTML = `<div class="text-center py-5"><i class="fa-solid fa-triangle-exclamation text-red-500 text-3xl mb-2"></i><br><span class="text-red-500 font-bold text-sm">Firebase Rules Error!</span><br><span class="text-gray-500 text-xs">ফায়ারবেস থেকে ডাটা পারমিশন ব্লক করা আছে।</span></div>`;
     });
 } catch (error) { console.error("Live Order Setup error:", error); }
 
@@ -591,13 +623,38 @@ const submitReviewBtn = document.getElementById('submitReviewBtn');
 const stars = document.querySelectorAll('#starContainer i');
 let selectedRating = 0;
 
-// Open Rating Modal
-openRatingModalBtn.addEventListener('click', () => {
+// Open Rating Modal (Load existing rating if any)
+openRatingModalBtn.addEventListener('click', async () => {
     if (!currentUser) {
         alert("দয়া করে রেটিং দিতে আগে লগিন করুন!");
         window.location.href = 'pages/login.html';
         return;
     }
+    
+    // ডাটাবেস থেকে ইউজারের আগের রেটিং খুঁজে বের করা
+    try {
+        const ratingRef = doc(db, "ratings", currentUser.uid);
+        const ratingSnap = await getDoc(ratingRef);
+        if (ratingSnap.exists()) {
+            const existingData = ratingSnap.data();
+            selectedRating = existingData.rating;
+            document.getElementById('reviewComment').value = existingData.comment || "";
+            
+            // আগের দেওয়া স্টারগুলো হলুদ করা
+            stars.forEach(s => {
+                if(parseInt(s.getAttribute('data-val')) <= selectedRating) {
+                    s.classList.remove('text-gray-300');
+                    s.classList.add('text-yellow-400');
+                } else {
+                    s.classList.remove('text-yellow-400');
+                    s.classList.add('text-gray-300');
+                }
+            });
+            // বাটনের লেখা পরিবর্তন করে Update Review করা
+            submitReviewBtn.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> Update Review';
+        }
+    } catch (error) { console.log("Error fetching rating:", error); }
+
     ratingModal.classList.remove('hidden');
     setTimeout(() => {
         ratingModal.classList.remove('opacity-0');
@@ -632,7 +689,7 @@ stars.forEach(star => {
     });
 });
 
-// Submit Rating
+// Submit/Update Rating (১ জন ১টি রেটিং)
 submitReviewBtn.addEventListener('click', async () => {
     if(selectedRating === 0) return alert("দয়া করে স্টার (★) সিলেক্ট করুন!");
     const comment = document.getElementById('reviewComment').value.trim();
@@ -645,7 +702,8 @@ submitReviewBtn.addEventListener('click', async () => {
         let name = currentUser.displayName || displayEmail;
         let photo = currentUser.photoURL || `https://ui-avatars.com/api/?name=${name}&background=random`;
 
-        await addDoc(collection(db, "ratings"), {
+        // setDoc ব্যবহার করা হয়েছে যাতে একই ইউজারের আগের রেটিং আপডেট হয়ে যায়
+        await setDoc(doc(db, "ratings", currentUser.uid), {
             uid: currentUser.uid,
             name: name,
             photoURL: photo,
@@ -654,7 +712,7 @@ submitReviewBtn.addEventListener('click', async () => {
             createdAt: serverTimestamp()
         });
         
-        alert("ধন্যবাদ! আপনার রেটিং সফলভাবে জমা হয়েছে।");
+        alert("ধন্যবাদ! আপনার রেটিং সফলভাবে জমা/আপডেট হয়েছে।");
         closeRatingModal();
         
         // Reset Modal
@@ -663,7 +721,7 @@ submitReviewBtn.addEventListener('click', async () => {
         document.getElementById('reviewComment').value = "";
     } catch(e) {
         console.error("Rating Error:", e);
-        alert("দুঃখিত, রেটিং সাবমিট হয়নি!");
+        alert("দুঃখিত, রেটিং সেভ করা সম্ভব হয়নি!");
     }
     submitReviewBtn.innerHTML = '<i class="fa-regular fa-paper-plane"></i> Submit Review';
     submitReviewBtn.disabled = false;
@@ -700,6 +758,9 @@ try {
             </div>`;
         });
         reviewsContainer.innerHTML = html;
+    }, (error) => {
+        console.error("Ratings Fetch Error:", error);
+        reviewsContainer.innerHTML = `<div class="col-span-full text-center py-5 border border-dashed border-red-300 rounded-xl bg-red-50"><i class="fa-solid fa-triangle-exclamation text-red-500 text-2xl mb-2"></i><br><span class="text-red-600 font-bold text-sm">Firebase Rules Blocked!</span><br><span class="text-gray-500 text-xs">আপনার ফায়ারবেস রুলস ঠিকমতো পাবলিশ হয়নি।</span></div>`;
     });
 } catch(error) { console.error("Ratings Fetch Error:", error); }
 
