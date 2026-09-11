@@ -136,9 +136,17 @@
 <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-200">
     <div class="max-w-6xl mx-auto flex justify-between items-center p-3 md:p-4">
         
-        <a href="index.html" class="flex items-center hover:opacity-90 transition cursor-pointer">
-            <img src="logo.png" alt="Saiem Bd Top Up" class="h-10 md:h-12 w-auto object-contain">
-        </a>
+       <!-- Logo & Desktop Category Menu -->
+        <div class="flex items-center gap-6 md:gap-10">
+            <a href="index.html" class="flex items-center hover:opacity-90 transition cursor-pointer">
+                <img src="logo.png" alt="Saiem Bd Top Up" class="h-10 md:h-12 w-auto object-contain">
+            </a>
+            
+            <!-- PC Only: FF TopUp Link -->
+            <button id="pcCategoryBtn" class="hidden md:block text-gray-600 hover:text-[#ff2a2a] font-bold text-[15px] transition focus:outline-none">
+                FF TopUp
+            </button>
+        </div>
 
         <!-- Logged OUT Menu (Fixed for Mobile) -->
         <div id="loggedOutMenu" class="flex items-center gap-1.5 md:gap-3">
@@ -828,5 +836,50 @@ if ('serviceWorker' in navigator) {
 }
 
 </script>
+
+<!-- CATEGORY FILTER SCRIPT (Low Bazar Style) -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const pcCategoryBtn = document.getElementById('pcCategoryBtn');
+    
+    if(pcCategoryBtn) {
+        pcCategoryBtn.addEventListener('click', () => {
+            // ১. নোটিশ হাইড করবে
+            const topNotice = document.getElementById('topNotice');
+            if(topNotice) topNotice.style.display = 'none';
+
+            // ২. স্লাইডার বন্ধ করে শুধু ১টি স্থির (Static) ব্যানার দেখাবে
+            const slider = document.getElementById('sliderTrack');
+            if(slider && slider.parentElement) {
+                slider.parentElement.innerHTML = `
+                    <a href="https://t.me/+YJqTbEn_Yoo5YmNl" target="_blank" class="w-full block">
+                        <img src="banner1.png" class="w-full h-auto object-contain" alt="Category Banner">
+                    </a>
+                `;
+            }
+            
+            // ৩. উপরের WhatsApp বাটন হাইড করবে
+            const topWhatsapp = document.querySelector('.mt-5.flex.justify-center');
+            if(topWhatsapp) topWhatsapp.style.display = 'none';
+            
+            // ৪. Latest Orders ও Customer Reviews হাইড করবে
+            const sections = document.querySelectorAll('.mt-14.mb-10');
+            sections.forEach(sec => sec.style.display = 'none');
+            
+            // ৫. নিচের Telegram/WhatsApp ব্যানার হাইড করবে
+            const joinLinks = document.querySelector('.mb-16.px-4');
+            if(joinLinks) joinLinks.style.display = 'none';
+
+            // বাটনের কালার লাল করে দিবে (সিলেক্টেড বোঝানোর জন্য)
+            pcCategoryBtn.classList.remove('text-gray-600');
+            pcCategoryBtn.classList.add('text-[#ff2a2a]');
+            
+            // ক্লিক করার পর পেজটাকে সুন্দর করে একদম উপরে নিয়ে যাবে
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+});
+</script>
+
 </body>
 </html>
